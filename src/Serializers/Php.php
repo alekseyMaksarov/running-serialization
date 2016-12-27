@@ -4,6 +4,10 @@ namespace Running\Serializers;
 
 use Running\Serialization\SerializerInterface;
 
+/**
+ * Class Php
+ * @package Running\Serializers
+ */
 class Php
     implements SerializerInterface
 {

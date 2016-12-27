@@ -46,4 +46,14 @@ class FileTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testEncodeNestedArray()
+    {
+        $serializer = new Php();
+
+        $this->assertEquals(
+            "[\n  0 => 1,\n  1 =>\n  [\n    0 => 2,\n    1 => 3,\n  ],\n]",
+            $serializer->encode([1, [2, 3]])
+        );
+    }
+
 }
