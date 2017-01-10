@@ -25,6 +25,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('0',  $serializer->encode(0));
         $this->assertEquals('42', $serializer->encode(42));
+        $this->assertEquals('-42', $serializer->encode(-42));
 
         $this->assertEquals('3.14159', $serializer->encode(3.14159));
         $this->assertEquals('-1.2E+34', $serializer->encode(-1.2e34));
@@ -81,6 +82,29 @@ class FileTest extends \PHPUnit_Framework_TestCase
             "Running\Core\Std::__set_state([\n   '__data' =>\n  [\n    'foo' => 'bar',\n    'baz' => 42,\n  ],\n])",
             $serializer->encode($obj)
         );
+    }
+
+    public function testDecodeScalar()
+    {
+        $serializer = new Php();
+
+        $this->assertEquals(null,  $serializer->decode('NULL'));
+        $this->assertEquals(null,  $serializer->decode('null'));
+        $this->assertEquals(true,  $serializer->decode('TRUE'));
+        $this->assertEquals(true,  $serializer->decode('true'));
+        $this->assertEquals(false, $serializer->decode('FALSE'));
+        $this->assertEquals(false, $serializer->decode('false'));
+
+        $this->assertEquals(0,  $serializer->decode('0'));
+        $this->assertEquals(42, $serializer->decode('42'));
+        $this->assertEquals(-42, $serializer->decode('-42'));
+
+        $this->assertEquals('3.14159', $serializer->decode('3.14159'));
+        $this->assertEquals(-1.2e34, $serializer->decode('-1.2E+34'));
+        $this->assertEquals(-1.2e34, $serializer->decode('-1.2e34'));
+
+        $this->assertEquals('foobar', $serializer->decode("'foobar'"));
+        $this->assertEquals('foo\'bar', $serializer->decode("'foo\\'bar'"));
     }
 
 }

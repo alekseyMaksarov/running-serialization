@@ -12,6 +12,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
+    "pr-of-it/running-core": "*",
     "php": ">=7.0"
   },
   "require-dev": {

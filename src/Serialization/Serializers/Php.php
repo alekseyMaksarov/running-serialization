@@ -2,6 +2,7 @@
 
 namespace Running\Serialization\Serializers;
 
+use Running\Serialization\DecodeException;
 use Running\Serialization\SerializerInterface;
 
 /**
@@ -41,9 +42,15 @@ class Php
      * Deserialize method
      * @param string $data
      * @return mixed
+     * @throws \Running\Serialization\DecodeException
      */
     public function decode(string $data)
     {
-        throw new \BadMethodCallException;
+        try {
+            return eval('return ' . $data . ';');
+        } catch (\ParseError $e) {
+            throw new DecodeException($e->getMessage(), $e->getCode(), $e);
+        }
+
     }
 }
