@@ -19,7 +19,22 @@ class Php
      */
     public function encode($data): string
     {
-        return preg_replace(['~^(\s*)array\s*\($~im', '~^(\s*)\)(\,?)$~im', '~\s+$~im'], ['$1[', '$1]$2', ''], var_export($data, true));
+        return preg_replace(
+            [
+                '~^([\s\S]+)__set_state\(array\s*\($~im',
+                '~^(\s*)array\s*\($~im',
+                '~^(\s*)\)(\,?)$~im',
+                '~^(\s*)\)\)(\,?)$~im',
+                '~\s+$~im'
+            ], [
+                '$1__set_state([',
+                '$1[',
+                '$1]$2',
+                '$1])$2',
+                ''
+            ],
+            var_export($data, true)
+        );
     }
 
     /**

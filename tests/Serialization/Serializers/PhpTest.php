@@ -2,6 +2,7 @@
 
 namespace Running\tests\Serialization\Serializers\Php;
 
+use Running\Core\Std;
 use Running\Serialization\SerializerInterface;
 use Running\Serialization\Serializers\Php;
 
@@ -53,6 +54,32 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             "[\n  0 => 1,\n  1 =>\n  [\n    0 => 2,\n    1 => 3,\n  ],\n]",
             $serializer->encode([1, [2, 3]])
+        );
+    }
+
+    public function testEncodeSimpleObject()
+    {
+        $serializer = new Php();
+        $obj = new \stdClass();
+        $obj->foo = 'bar';
+        $obj->baz = 42;
+
+        $this->assertEquals(
+            "stdClass::__set_state([\n   'foo' => 'bar',\n   'baz' => 42,\n])",
+            $serializer->encode($obj)
+        );
+    }
+
+    public function testEncodeStdObject()
+    {
+        $serializer = new Php();
+        $obj = new Std();
+        $obj->foo = 'bar';
+        $obj->baz = 42;
+
+        $this->assertEquals(
+            "Running\Core\Std::__set_state([\n   '__data' =>\n  [\n    'foo' => 'bar',\n    'baz' => 42,\n  ],\n])",
+            $serializer->encode($obj)
         );
     }
 
