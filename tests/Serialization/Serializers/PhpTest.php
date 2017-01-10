@@ -131,4 +131,14 @@ class FileTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException \Running\Serialization\DecodeException
+     */
+    public function testDecodeParseError()
+    {
+        $serializer = new Php();
+        $serializer->decode('foo() function does not exist');
+        $this->fail();
+    }
+
 }
