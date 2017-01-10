@@ -107,4 +107,28 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo\'bar', $serializer->decode("'foo\\'bar'"));
     }
 
+    public function testDecodeSimpleArray()
+    {
+        $serializer = new Php();
+
+        $this->assertEquals(
+            [1, 2, 3],
+            $serializer->decode("[0 => 1, 1 => 2, 2 => 3,]")
+        );
+        $this->assertEquals(
+            ['foo' => 100, 'bar' => 200, 'baz' => 300],
+            $serializer->decode("['foo' => 100, 'bar' => 200, 'baz' => 300,]")
+        );
+    }
+
+    public function testDecodeNestedArray()
+    {
+        $serializer = new Php();
+
+        $this->assertEquals(
+            [1, [2, 3]],
+            $serializer->decode("[0 => 1, 1 => [0 => 2, 1 => 3,],]")
+        );
+    }
+
 }
