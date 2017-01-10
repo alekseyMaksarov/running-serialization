@@ -15,6 +15,10 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SerializerInterface::class, $serializer);
     }
 
+    /*
+     * ----------
+     */
+
     public function testEncodeScalar()
     {
         $serializer = new Php();
@@ -34,6 +38,33 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("'foo\\'bar'", $serializer->encode('foo\'bar'));
     }
 
+    public function testDecodeScalar()
+    {
+        $serializer = new Php();
+
+        $this->assertEquals(null,  $serializer->decode('NULL'));
+        $this->assertEquals(null,  $serializer->decode('null'));
+        $this->assertEquals(true,  $serializer->decode('TRUE'));
+        $this->assertEquals(true,  $serializer->decode('true'));
+        $this->assertEquals(false, $serializer->decode('FALSE'));
+        $this->assertEquals(false, $serializer->decode('false'));
+
+        $this->assertEquals(0,  $serializer->decode('0'));
+        $this->assertEquals(42, $serializer->decode('42'));
+        $this->assertEquals(-42, $serializer->decode('-42'));
+
+        $this->assertEquals('3.14159', $serializer->decode('3.14159'));
+        $this->assertEquals(-1.2e34, $serializer->decode('-1.2E+34'));
+        $this->assertEquals(-1.2e34, $serializer->decode('-1.2e34'));
+
+        $this->assertEquals('foobar', $serializer->decode("'foobar'"));
+        $this->assertEquals('foo\'bar', $serializer->decode("'foo\\'bar'"));
+    }
+
+    /*
+     * ----------
+     */
+
     public function testEncodeSimpleArray()
     {
         $serializer = new Php();
@@ -48,6 +79,24 @@ class FileTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testDecodeSimpleArray()
+    {
+        $serializer = new Php();
+
+        $this->assertEquals(
+            [1, 2, 3],
+            $serializer->decode("[0 => 1, 1 => 2, 2 => 3,]")
+        );
+        $this->assertEquals(
+            ['foo' => 100, 'bar' => 200, 'baz' => 300],
+            $serializer->decode("['foo' => 100, 'bar' => 200, 'baz' => 300,]")
+        );
+    }
+
+    /*
+     * ----------
+     */
+
     public function testEncodeNestedArray()
     {
         $serializer = new Php();
@@ -57,6 +106,20 @@ class FileTest extends \PHPUnit_Framework_TestCase
             $serializer->encode([1, [2, 3]])
         );
     }
+
+    public function testDecodeNestedArray()
+    {
+        $serializer = new Php();
+
+        $this->assertEquals(
+            [1, [2, 3]],
+            $serializer->decode("[0 => 1, 1 => [0 => 2, 1 => 3,],]")
+        );
+    }
+
+    /*
+     * ----------
+     */
 
     public function testEncodeSimpleObject()
     {
@@ -84,52 +147,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testDecodeScalar()
-    {
-        $serializer = new Php();
-
-        $this->assertEquals(null,  $serializer->decode('NULL'));
-        $this->assertEquals(null,  $serializer->decode('null'));
-        $this->assertEquals(true,  $serializer->decode('TRUE'));
-        $this->assertEquals(true,  $serializer->decode('true'));
-        $this->assertEquals(false, $serializer->decode('FALSE'));
-        $this->assertEquals(false, $serializer->decode('false'));
-
-        $this->assertEquals(0,  $serializer->decode('0'));
-        $this->assertEquals(42, $serializer->decode('42'));
-        $this->assertEquals(-42, $serializer->decode('-42'));
-
-        $this->assertEquals('3.14159', $serializer->decode('3.14159'));
-        $this->assertEquals(-1.2e34, $serializer->decode('-1.2E+34'));
-        $this->assertEquals(-1.2e34, $serializer->decode('-1.2e34'));
-
-        $this->assertEquals('foobar', $serializer->decode("'foobar'"));
-        $this->assertEquals('foo\'bar', $serializer->decode("'foo\\'bar'"));
-    }
-
-    public function testDecodeSimpleArray()
-    {
-        $serializer = new Php();
-
-        $this->assertEquals(
-            [1, 2, 3],
-            $serializer->decode("[0 => 1, 1 => 2, 2 => 3,]")
-        );
-        $this->assertEquals(
-            ['foo' => 100, 'bar' => 200, 'baz' => 300],
-            $serializer->decode("['foo' => 100, 'bar' => 200, 'baz' => 300,]")
-        );
-    }
-
-    public function testDecodeNestedArray()
-    {
-        $serializer = new Php();
-
-        $this->assertEquals(
-            [1, [2, 3]],
-            $serializer->decode("[0 => 1, 1 => [0 => 2, 1 => 3,],]")
-        );
-    }
+    /*
+     * ----------
+     */
 
     /**
      * @expectedException \Running\Serialization\DecodeException
