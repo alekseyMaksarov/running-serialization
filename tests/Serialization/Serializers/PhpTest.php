@@ -1,9 +1,9 @@
 <?php
 
-namespace Running\tests\Serializers\Php;
+namespace Running\tests\Serialization\Serializers\Php;
 
 use Running\Serialization\SerializerInterface;
-use Running\Serializers\Php;
+use Running\Serialization\Serializers\Php;
 
 class FileTest extends \PHPUnit_Framework_TestCase
 {
