@@ -4,6 +4,9 @@ php:
   - '7.1'
   - nightly
 
+install:
+  - composer install
+
 script: phpunit --configuration tests/phpunit.xml
 
 after_success:
