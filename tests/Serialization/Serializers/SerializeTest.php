@@ -31,7 +31,13 @@ class SerializeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('i:42;', $serializer->encode(42));
         $this->assertEquals('i:-42;', $serializer->encode(-42));
 
-        $this->assertEquals('d:3.14159;', $serializer->encode(3.14159));
+        $this->assertThat(
+            $serializer->encode(3.14159),
+            $this->logicalOr(
+                $this->equalTo('d:3.14159;'),
+                $this->equalTo('d:3.1415899999999999;')
+            )
+        );
         $this->assertEquals('d:-1.2E+34;', $serializer->encode(-1.2e34));
 
         $this->assertEquals('s:6:"foobar";', $serializer->encode('foobar'));
