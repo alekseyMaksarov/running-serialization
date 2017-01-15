@@ -22,7 +22,7 @@ class Php
     {
         return preg_replace(
             [
-                '~^([\s\S]+)__set_state\(array\s*\($~im',
+                '~^([\s\S]+)__set_state\(array\s*\($~imU',
                 '~^(\s*)array\s*\($~im',
                 '~^(\s*)\)(\,?)$~im',
                 '~^(\s*)\)\)(\,?)$~im',
