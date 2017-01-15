@@ -173,4 +173,24 @@ class SerializeTest extends \PHPUnit_Framework_TestCase
         $this->fail();
     }
 
+    /*
+     * ----------
+     */
+
+    public function testEncodeArrayOfSimpleObjects()
+    {
+        $serializer = new serialize();
+        $obj1 = new \stdClass();
+        $obj1->foo = 'bar';
+        $obj1->baz = 42;
+        $obj2 = new \stdClass();
+        $obj2->bat = 'quux';
+        $obj2->quuux = 1337;
+        $arrayOfSimpleObjects = [$obj1, $obj2];
+
+        $this->assertEquals(
+            'a:2:{i:0;O:8:"stdClass":2:{s:3:"foo";s:3:"bar";s:3:"baz";i:42;}i:1;O:8:"stdClass":2:{s:3:"bat";s:4:"quux";s:5:"quuux";i:1337;}}',
+            $serializer->encode($arrayOfSimpleObjects)
+        );
+    }
 }
