@@ -165,7 +165,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
      * ----------
      */
 
-    public function testEncodeArrayOfObjects()
+    public function testEncodeArrayOfSimpleObjects()
     {
         $serializer = new Php();
         $obj1 = new \stdClass();
@@ -174,11 +174,28 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $obj2 = new \stdClass();
         $obj2->bat = 'quux';
         $obj2->quuux = 1337;
-        $arrayOfObjects = [$obj1, $obj2];
+        $arrayOfSimpleObjects = [$obj1, $obj2];
 
         $this->assertEquals(
             "[\n  0 =>\n  stdClass::__set_state([\n     'foo' => 'bar',\n     'baz' => 42,\n  ]),\n  1 =>\n  stdClass::__set_state([\n     'bat' => 'quux',\n     'quuux' => 1337,\n  ]),\n]",
-            $serializer->encode($arrayOfObjects)
+            $serializer->encode($arrayOfSimpleObjects)
+        );
+    }
+
+    public function testEncodeArrayOfStdObjects()
+    {
+        $serializer = new Php();
+        $obj1 = new Std();
+        $obj1->foo = 'bar';
+        $obj1->baz = 42;
+        $obj2 = new Std();
+        $obj2->bat = 'quux';
+        $obj2->quuux = 1337;
+        $arrayOfStdObjects = [$obj1, $obj2];
+
+        $this->assertEquals(
+            "[\n  0 =>\n  Running\Core\Std::__set_state([\n     '__data' =>\n    [\n      'foo' => 'bar',\n      'baz' => 42,\n    ],\n  ]),\n  1 =>\n  Running\Core\Std::__set_state([\n     '__data' =>\n    [\n      'bat' => 'quux',\n      'quuux' => 1337,\n    ],\n  ]),\n]",
+            $serializer->encode($arrayOfStdObjects)
         );
     }
 
