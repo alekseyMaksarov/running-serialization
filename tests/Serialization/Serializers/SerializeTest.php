@@ -179,7 +179,7 @@ class SerializeTest extends \PHPUnit_Framework_TestCase
 
     public function testEncodeArrayOfSimpleObjects()
     {
-        $serializer = new serialize();
+        $serializer = new Serialize();
         $obj1 = new \stdClass();
         $obj1->foo = 'bar';
         $obj1->baz = 42;
