@@ -6,6 +6,32 @@ use Running\Core\Std;
 use Running\Serialization\SerializerInterface;
 use Running\Serialization\Serializers\Php;
 
+class testClass
+{
+    public $foo;
+    private $bar;
+    protected $baz;
+
+    public function setPrivateField($value)
+    {
+        $this->bar = $value;
+    }
+
+    public function setProtectedField($value)
+    {
+        $this->baz = $value;
+    }
+
+    public static function __set_state($array)
+    {
+        $testObj = new testClass();
+        $testObj->foo = $array['foo'];
+        $testObj->setProtectedField($array['baz']);
+        $testObj->setPrivateField($array['bar']);
+        return $testObj;
+    }
+}
+
 class FileTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -197,6 +223,22 @@ class FileTest extends \PHPUnit_Framework_TestCase
             "[\n  0 =>\n  Running\Core\Std::__set_state([\n     '__data' =>\n    [\n      'foo' => 'bar',\n      'baz' => 42,\n    ],\n  ]),\n  1 =>\n  Running\Core\Std::__set_state([\n     '__data' =>\n    [\n      'bat' => 'quux',\n      'quuux' => 1337,\n    ],\n  ]),\n]",
             $serializer->encode($arrayOfStdObjects)
         );
+    }
+
+    /*
+     * ----------
+     */
+
+    public function testDecodeObject()
+    {
+        $serializer = new Php();
+        $obj = new testClass();
+        $obj->foo = 'quux';
+        $obj->setProtectedField('quuux');
+        $obj->setPrivateField(42);
+        $serializedObj = $serializer->encode($obj);
+
+        $this->assertEquals($obj, $serializer->decode($serializedObj));
     }
 
 }
