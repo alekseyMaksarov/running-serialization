@@ -6,6 +6,23 @@ use Running\Core\Std;
 use Running\Serialization\SerializerInterface;
 use Running\Serialization\Serializers\Serialize;
 
+class testClass
+{
+    public $foo;
+    private $bar;
+    protected $baz;
+
+    public function setPrivateField($value)
+    {
+        $this->bar = $value;
+    }
+
+    public function setProtectedField($value)
+    {
+        $this->baz = $value;
+    }
+}
+
 class SerializeTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -209,5 +226,17 @@ class SerializeTest extends \PHPUnit_Framework_TestCase
             'a:2:{i:0;C:16:"Running\Core\Std":41:{a:2:{s:3:"foo";s:3:"bar";s:3:"baz";i:42;}}i:1;C:16:"Running\Core\Std":46:{a:2:{s:3:"bat";s:4:"quux";s:5:"quuux";i:1337;}}}',
             $serializer->encode($arrayOfStdObjects)
         );
+    }
+
+    public function testDecodeObject()
+    {
+        $serializer = new Serialize();
+        $obj = new testClass();
+        $obj->foo = 'quux';
+        $obj->setProtectedField('quuux');
+        $obj->setPrivateField(42);
+        $serializedObj = $serializer->encode($obj);
+
+        $this->assertEquals($obj, $serializer->decode($serializedObj));
     }
 }
