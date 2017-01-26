@@ -31,7 +31,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('-42', $serializer->encode(-42));
 
         $this->assertEquals('3.14159', $serializer->encode(3.14159));
-        $this->assertEquals('-1.2E+34', $serializer->encode(-1.2e34));
+        $this->assertEquals('-1.2e+34', $serializer->encode(-1.2e34));
 
         $this->assertEquals('"foobar"', $serializer->encode('foobar'));
         $this->assertEquals('"foo\'bar"', $serializer->encode('foo\'bar'));
@@ -41,6 +41,18 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     {
         $serializer = new Json();
 
-        $this->assertEquals(null,  $serializer->decode("null"));
+        $this->assertEquals(null, $serializer->decode("null"));
+        $this->assertEquals(true, $serializer->decode("true"));
+        $this->assertEquals(false, $serializer->decode("false"));
+
+        $this->assertEquals(0, $serializer->decode("0"));
+        $this->assertEquals(42, $serializer->decode("42"));
+        $this->assertEquals(-42, $serializer->decode("-42"));
+
+        $this->assertEquals(3.14159, $serializer->decode("3.14159"));
+        $this->assertEquals(-1.2e34, $serializer->decode("-1.2e+34"));
+
+        $this->assertEquals('foobar', $serializer->decode('"foobar"'));
+        $this->assertEquals('foo\'bar', $serializer->decode('"foo\'bar"'));
     }
 }
