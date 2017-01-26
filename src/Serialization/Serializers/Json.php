@@ -2,6 +2,7 @@
 
 namespace Running\Serialization\Serializers;
 
+use Running\Serialization\EncodeJsonException;
 use Running\Serialization\DecodeException;
 use Running\Serialization\SerializerInterface;
 
@@ -18,11 +19,17 @@ class Json
      * @param mixed $data
      * @param int $options
      * @param int $depth
-     * @return string | false
+     * @return string
      */
-    public function encode($data, int $options = 0, int $depth = 512)
+    public function encode($data, int $options = 0, int $depth = 512): string
     {
-        return json_encode($data, $options, $depth);
+        $encoded = json_encode($data, $options, $depth);
+
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            throw new EncodeJsonException(json_last_error_msg());
+        }
+
+        return $encoded;
     }
 
     /**
@@ -36,5 +43,12 @@ class Json
      */
     public function decode(string $data, bool $assoc = false, int $depth = 512, int $options = 0)
     {
+        $decoded = json_decode($data, $assoc, $depth, $options);
+
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            throw new DecodeException(json_last_error_msg());
+        }
+
+        return $decoded;
     }
 }
