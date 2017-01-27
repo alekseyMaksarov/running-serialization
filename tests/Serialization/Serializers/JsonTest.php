@@ -4,6 +4,7 @@ namespace Running\tests\Serialization\Serializers\Json;
 
 use Running\Serialization\SerializerInterface;
 use Running\Serialization\Serializers\Json;
+use Running\Core\Std;
 
 class JsonTest extends \PHPUnit_Framework_TestCase
 {
@@ -97,6 +98,75 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             ['foo' => 'bar', 'baz' => 42, 'quux' => 3.14159, 'quuux' => null],
             $serializer->decode('{"foo":"bar","baz":42,"quux":3.14159,"quuux":null}', true)
+        );
+    }
+
+    /*
+     * ----------
+     */
+
+    public function testEncodeNestedArray()
+    {
+        $serializer = new Json();
+
+        $this->assertEquals(
+            '[1,2,[3,4]]',
+            $serializer->encode([1, 2, [3, 4]])
+        );
+    }
+
+    public function testDecodeNestedArray()
+    {
+        $serializer = new Json();
+
+        $this->assertEquals(
+            [1, 2, [3, 4]],
+            $serializer->decode('[1,2,[3,4]]')
+        );
+    }
+
+    /*
+     * ----------
+     */
+
+    public function testEncodeSimpleObject()
+    {
+        $serializer = new Json();
+        $obj = new \stdClass();
+        $obj->foo = 'bar';
+        $obj->baz = 42;
+
+        $this->assertEquals(
+            '{"foo":"bar","baz":42}',
+            $serializer->encode($obj)
+        );
+    }
+
+    public function testDecodeSimpleObject()
+    {
+        $serializer = new Json();
+        $obj = new \stdClass();
+        $obj->foo = 'bar';
+        $obj->baz = 42;
+        $serializedObj = $serializer->encode($obj);
+
+        $this->assertEquals($obj, $serializer->decode($serializedObj));
+    }
+
+    /*
+     * ----------
+     */
+
+    public function testEncodeStdObject()
+    {
+        $serializer = new Json();
+        $obj = new Std();
+        $obj->foo = 'bar';
+        $obj->baz = 42;
+
+        $this->assertEquals(
+            '{"foo":"bar","baz":42}',
+            $serializer->encode($obj)
         );
     }
 }
