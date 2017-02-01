@@ -55,4 +55,28 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foobar', $serializer->decode('"foobar"'));
         $this->assertEquals('foo\'bar', $serializer->decode('"foo\'bar"'));
     }
+
+    /*
+     * ----------
+     */
+
+    /**
+    * @expectedException \Running\Serialization\EncodeJsonException
+    **/
+    public function testJsonEncodeError()
+    {
+        $serializer = new Json();
+        $serializer->encode(NAN);
+        $this->fail();
+    }
+
+    /**
+    * @expectedException \Running\Serialization\DecodeException
+    **/
+    public function testJsonDecodeError()
+    {
+        $serializer = new Json();
+        $serializer->decode("{'invalid':'data'}");
+        $this->fail();
+    }
 }
