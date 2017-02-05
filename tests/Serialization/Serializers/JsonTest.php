@@ -175,7 +175,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
      */
 
     /**
-    * @expectedException \Running\Serialization\EncodeJsonException
+    * @expectedException \Running\Serialization\EncodeException
     **/
     public function testJsonEncodeError()
     {

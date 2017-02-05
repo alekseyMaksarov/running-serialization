@@ -3,14 +3,14 @@
 namespace Running\Serialization;
 
 /**
- * Encode json exception
+ * Encode data exception
  *
- * Class EncodeJsonException
+ * Class EncodeException
  * @package Running\Serialization
  *
  * @codeCoverageIgnore
  */
-class EncodeJsonException
+class EncodeException
     extends \Running\Core\Exception
 {
 

@@ -2,7 +2,7 @@
 
 namespace Running\Serialization\Serializers;
 
-use Running\Serialization\EncodeJsonException;
+use Running\Serialization\EncodeException;
 use Running\Serialization\DecodeException;
 use Running\Serialization\SerializerInterface;
 
@@ -20,14 +20,14 @@ class Json
      * @param int $options
      * @param int $depth
      * @return string
-     * @throws \Running\Serialization\EncodeJsonException
+     * @throws \Running\Serialization\EncodeException
      */
     public function encode($data, int $options = 0, int $depth = 512): string
     {
         $encoded = json_encode($data, $options, $depth);
 
         if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new EncodeJsonException(json_last_error_msg());
+            throw new EncodeException(json_last_error_msg());
         }
 
         return $encoded;
